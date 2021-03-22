@@ -1,6 +1,6 @@
 <?php
 $data = json_decode(file_get_contents("php://input"));
-
+echo "SUCCESS";
 $request = json_encode($data);
 
 $curl = curl_init();
