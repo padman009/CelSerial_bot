@@ -3,7 +3,7 @@
 require_once "vendor/autoload.php";
 
 try {
-    $token = "токен";
+    $token = "1579855702:AAHt31URf36N8jqjLsjIdop8LOqGMD0g51A";
     $bot = new \TelegramBot\Api\BotApi('YOUR_BOT_API_TOKEN');
 
     $bot->command('start', function ($message) use ($bot) {
