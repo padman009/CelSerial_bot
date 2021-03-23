@@ -1,10 +1,12 @@
 <?php
 
+use TelegramBot\Api\BotApi;
+
 require_once "vendor/autoload.php";
 
 try {
     $token = "1579855702:AAHt31URf36N8jqjLsjIdop8LOqGMD0g51A";
-    $bot = new \TelegramBot\Api\BotApi($token);
+    $bot = new BotApi($token);
 
     $bot->command('start', function ($message) use ($bot) {
         $answer = 'Добро пожаловать!';
@@ -28,11 +30,10 @@ try {
     $bot->run();
 
 } catch (\TelegramBot\Api\Exception $e) {
-    $e->getMessage();
 }
 
 function botMessage($token, $data, $chat_id=''){
-    $txt = $this->ArrToStr($data);
+    $txt = ArrToStr($data);
 
     $curl = curl_init();
     curl_setopt_array($curl, array(
