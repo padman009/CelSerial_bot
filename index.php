@@ -26,8 +26,6 @@ try {
         $bot->sendMessage($message->getChat()->getId(), $answer);
     });
 
-    $bot->sendMessage("410782452", "Success");
-
     $botClient->run();
 
 } catch (\TelegramBot\Api\Exception $e) {
