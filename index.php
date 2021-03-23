@@ -1,30 +1,29 @@
 <?php
-echo "SUCCESS";
 
-$data = json_decode(file_get_contents("php://input"));
+require_once "vendor/autoload.php";
 
-if(empty($data)){
-   return;
+try {
+    $token = "токен";
+    $bot = new \TelegramBot\Api\BotApi('YOUR_BOT_API_TOKEN');
+
+    $bot->command('start', function ($message) use ($bot) {
+        $answer = 'Добро пожаловать!';
+        $bot->sendMessage($message->getChat()->getId(), $answer);
+    });
+
+    $bot->command('hello', function ($message) use ($bot) {
+        $text = $message->getText();
+        $param = str_replace('/hello ', '', $text);
+        $answer = 'Неизвестная команда';
+        if (!empty($param))
+        {
+            $answer = 'Привет, ' . $param;
+        }
+        $bot->sendMessage($message->getChat()->getId(), $answer);
+    });
+
+    $bot->run();
+
+} catch (\TelegramBot\Api\Exception $e) {
+    $e->getMessage();
 }
-
-$request = json_encode($data);
-
-$curl = curl_init();
-curl_setopt_array($curl, array(
-    CURLOPT_URL => "http://s77590w0.beget.tech/bot_test/",
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_ENCODING => '',
-    CURLOPT_MAXREDIRS => 10,
-    CURLOPT_TIMEOUT => 0,
-    CURLOPT_FOLLOWLOCATION => true,
-    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    CURLOPT_CUSTOMREQUEST => 'POST',
-    CURLOPT_POSTFIELDS =>$request,
-    CURLOPT_HTTPHEADER => array(
-        'Content-Type: application/json'
-    ),
-));
-
-$sendToTelegram = curl_exec($curl);
-curl_close($curl);
-?>
