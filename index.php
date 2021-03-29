@@ -6,7 +6,7 @@ use TelegramBot\Api\Client;
 require_once "vendor/autoload.php";
 
 try {
-    $token = "1579855702:AAHt31URf36N8jqjLsjIdop8LOqGMD0g51A";
+    $token = "1711530564:AAHyaED9pjIgroLmXmnxgNA8p5w3eiSUE2w";
     $bot = new BotApi($token);
     $botClient = new Client($token);
 
