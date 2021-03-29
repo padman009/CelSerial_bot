@@ -11,7 +11,7 @@ try {
     $botClient = new Client($token);
 
     $botClient->command('start', function ($message) use ($bot) {
-        $answer = 'Добро пожаловать!'.$message->getChat()->getFirstName()." - ".$message->getChat()->getLastName();
+        $answer = 'Добро пожаловать!\n'.$message->getChat()->getFirstName()." - ".$message->getChat()->getLastName();
         $bot->sendMessage($message->getChat()->getId(), $answer);
     });
 
