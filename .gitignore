@@ -1,6 +1,19 @@
+.idea/.name
+.idea/php.xml
+.idea/codeStyles/codeStyleConfig.xml
+.idea/inspectionProfiles/Project_Default.xml
 
-# Created by https://www.toptal.com/developers/gitignore/api/phpstorm,phpcodesniffer,git,windows,composer
-# Edit at https://www.toptal.com/developers/gitignore?templates=phpstorm,phpcodesniffer,git,windows,composer
+# Default ignored files
+/shelf/
+/workspace.xml
+# Datasource local storage ignored files
+/../../../../../:\xampp\htdocs\test_bot\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+
+# Created by https://www.toptal.com/developers/gitignore/api/phpstorm,windows,composer
+# Edit at https://www.toptal.com/developers/gitignore?templates=phpstorm,windows,composer
 
 ### Composer ###
 composer.phar
@@ -9,27 +22,6 @@ composer.phar
 # Commit your application's lock file https://getcomposer.org/doc/01-basic-usage.md#commit-your-composer-lock-file-to-version-control
 # You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
 # composer.lock
-
-### Git ###
-# Created by git for backups. To disable backups in Git:
-# $ git config --global mergetool.keepBackup false
-*.orig
-
-# Created by git when using merge tools for conflicts
-*.BACKUP.*
-*.BASE.*
-*.LOCAL.*
-*.REMOTE.*
-*_BACKUP_*.txt
-*_BASE_*.txt
-*_LOCAL_*.txt
-*_REMOTE_*.txt
-
-### PHPCodeSniffer ###
-# CodeSniffer
-
-/vendor/*
-/wpcs/*
 
 ### PhpStorm ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
@@ -160,4 +152,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.toptal.com/developers/gitignore/api/phpstorm,phpcodesniffer,git,windows,composer
+# End of https://www.toptal.com/developers/gitignore/api/phpstorm,windows,composer
+my_database/sdunet.json
+my_database/subscribes.json
+config/database.php
