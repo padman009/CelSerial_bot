@@ -11,7 +11,7 @@ try {
     $botClient = new Client($token);
 
     $botClient->command('start', function ($message) use ($bot) {
-        $answer = "Добро пожаловать!\n".$message->getChat()->getFirstName();
+        $answer = "Добро пожаловать! " . $message->getChat()->getFirstName();
         $bot->sendMessage($message->getChat()->getId(), $answer);
     });
 
@@ -21,12 +21,37 @@ try {
         $answer = 'Неизвестная команда';
         if (!empty($param))
         {
-            $answer = 'Привет, ' . $param;
+            $answer = 'Привет, ' . $message->getChat()->getFirstName();
         }
         $bot->sendMessage($message->getChat()->getId(), $answer);
     });
 
+    $botClient->command('addshow', function ($message) use ($bot) {
+        $text = $message->getText();
+        $user_input = getArrOfSubscribe($text);
+
+        $answer = storeUserInput($user_input) ? "Success added" : "Fail in adding";
+        $bot->sendMessage($message->getChat()->getId(), $answer);
+    });
+
+    $data = json_decode(file_get_contents("php://input"));
+
+    echo json_encode($data);
+
+    if($data->send){
+        $bot->sendMessage("410782452",$data->text);
+    }
+
     $botClient->run();
 
 } catch (\TelegramBot\Api\Exception $e) {
+}
+
+function getArrOfSubscribe($text){
+    $res = [];
+    return $res;
+}
+
+function storeUserInput($user_data){
+    return true;
 }
