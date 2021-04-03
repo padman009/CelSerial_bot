@@ -1,17 +1,13 @@
 <?php
-
-if(empty($_POST)){
-    main();
-}
-
 function main(){
     header('Content-Type: application/json; charset=utf-8');
 
-    $html = "\xEF\xBB\xBF".getHtml("https://rezka.ag/");
+//    $html = "\xEF\xBB\xBF".getHtml("https://rezka.ag/");
 
-    //$html = file_get_contents("test.html");
+    $html = file_get_contents("test.html");
 
     include_once "libs/php-selector-master/selector.inc";
+
     $dom = new SelectorDOM($html);
     $div = $dom->select('div[class="b-seriesupdate__block"]')[0]["children"];
 
@@ -26,11 +22,15 @@ function main(){
     unset($episodes_div[sizeof($div[1]["children"]) - 1]);
 
     $episodes = getEpisodesArrFromDivsArr($episodes_div);
+
+    echo json_encode($episodes);
     $fresh_episodes = getFreshEpisodes($episodes);
-    echo json_encode($fresh_episodes);
+//    echo json_encode($fresh_episodes);
 
     //$links = array_slice($dom->select('div[class="b-seriesupdate__block"]>>a'), 0, sizeof($episodes_div));
 }
+
+//main();
 
 function getHtml($url)
 {
@@ -52,7 +52,12 @@ function getHtml($url)
 }
 
 function getEpisodesFromUserText($text){
-    $res = mb_split("-", $text);
+    $res = [];
+    $raw_shows = mb_split("\n", $text);
+    foreach ($raw_shows as $index => $show) {
+        $index = strpos($show, "(");
+        $res[] = [substr($show, 0, $index) => substr($show, $index) == "()" ? "" : substr($show, $index)];
+    }
     return $res;
 }
 
@@ -61,7 +66,7 @@ function getEpisodesArrFromDivsArr($episodes_div){
 
     foreach ($episodes_div as $index => $div) {
         $episode["name"] = $div["children"][0]["children"][0]["children"][0]["text"];
-        $episode["link"] = $div["children"][0]["children"][0]["children"][0]["attributes"]["href"];
+        $episode["link"] = "https://rezka.ag".$div["children"][0]["children"][0]["children"][0]["attributes"]["href"];
         $episode["season"] = $div["children"][0]["children"][0]["children"][1]["text"];
         $episode["sound"] = isset($div["children"][0]["children"][1]["children"][0]["text"]) ? $div["children"][0]["children"][1]["children"][0]["text"] : "";
         $episode["episode"] = str_replace($episode["sound"],"",$div["children"][0]["children"][1]["text"]);
@@ -107,9 +112,13 @@ function storeTodayEpisodes($today_episodes){
 }
 
 //echo json_encode(storeUserInput(["chat_id"=>"1212", "episodes" => [["Супергёрл" => "lostfilm"],["ЛЗД"=>"Lostfilms"]]]));
+//echo json_encode(getDataFrom("subs"));
 function storeUserInput($user_data){
     $subs = getDataFrom("subs");
 
+    if(!isset($subs[$user_data["chat_id"]])){
+        $subs[$user_data["chat_id"]] = [];
+    }
     foreach ($user_data["episodes"] as $index => $episode) {
         if(!array_search($episode, $subs[$user_data["chat_id"]])){
             $subs[$user_data["chat_id"]][] = $episode;
@@ -130,7 +139,7 @@ function storeUserInput($user_data){
     $response = json_decode($response, true);
     curl_close($curl);
 
-    return $response["message"] == "Success";
+    return $response;
 }
 
 function getDataFrom($filename){
