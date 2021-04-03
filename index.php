@@ -35,11 +35,7 @@ try {
         $bot->sendMessage($message->getChat()->getId(), $answer);
     });
 
-    $botClient->command("", function ($message) use ($bot){
-       $bot->sendMessage($message->getChat()->getId(), $message->getText());
-    });
-
-    $bot->sendMessage("410782452", $botClient->getRawBody());
+    $bot->sendMessage("410782452", $botClient->getRawBody()["message"]["text"]);
 
 //    $statuses = fopen("status.json", r);
 //    if($statuses[])
