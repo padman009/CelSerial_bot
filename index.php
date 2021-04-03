@@ -28,10 +28,11 @@ try {
 
     $botClient->command('addshow', function ($message) use ($bot) {
         $text = $message->getText();
-        $user_input["episodes"] = getEpisodesFromUserText($text);
-        $user_input["chat_id"] = $message->getChat()->getId();
+//        $user_input["episodes"] = getEpisodesFromUserText($text);
+//        $user_input["chat_id"] = $message->getChat()->getId();
 
-        $answer = storeUserInput($user_input) ? "Success added" : "Fail in adding";
+//        $answer = storeUserInput($user_input) ? "Success added" : "Fail in adding";
+        $answer = "OK";
         $bot->sendMessage($message->getChat()->getId(), $answer);
     });
 
@@ -54,4 +55,5 @@ try {
     $botClient->run();
 
 } catch (\TelegramBot\Api\Exception $e) {
+
 }
