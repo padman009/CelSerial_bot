@@ -35,10 +35,8 @@ try {
         $bot->sendMessage($message->getChat()->getId(), $answer);
     });
 
-
     $data = json_decode(file_get_contents("php://input"), true);
-    $message = \TelegramBot\Api\Types\Message::fromResponse($data["message"]);
-    $bot->sendMessage($message->getChat()->getId(), $message->getText());
+    $bot->sendMessage("410782452", $data["message"]["text"]);
 
 //    $statuses = fopen("status.json", r);
 //    if($statuses[])
@@ -55,5 +53,3 @@ try {
 
 } catch (\TelegramBot\Api\Exception $e) {
 }
-
-include_once "main.php";
