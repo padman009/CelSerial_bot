@@ -57,6 +57,9 @@ try {
         echo json_encode($response);
         if($response["message"] != "Success"){
             $bot->sendMessage("410782452", json_encode($response));
+            $bot->sendMessage($data["message"]["from"]["id"], "Adding show failed");
+        }else{
+            $bot->sendMessage($data["message"]["from"]["id"], "Шоу успешно добавлено!\nПроверьте командой /addshow");
         }
     }
 //

@@ -4,6 +4,7 @@
       "ext-curl": "*",
       "ext-dom": "*",
       "ext-tidy": "*",
-      "ext-recode": "*"
+      "ext-recode": "*",
+      "ext-mbstring": "*"
     }
 }
