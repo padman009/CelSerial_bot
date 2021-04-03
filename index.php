@@ -32,7 +32,12 @@ try {
 //        $user_input["chat_id"] = $message->getChat()->getId();
 
 //        $answer = storeUserInput($user_input) ? "Success added" : "Fail in adding";
-        $answer = "OK";
+        $answer =
+            "Отправьте название шоу (так как и на сайте) и озвучки в формате *название*(*озвучка*)\n
+            Вы можете отправить несколько шоу в одном сообщении написав по одному шоу в строку\n
+            Например:\n
+            Пацаны(Kubik³)\n
+            Сокол и Зимний Солдат(LostFilm)\n";
         $bot->sendMessage($message->getChat()->getId(), $answer);
     });
 
