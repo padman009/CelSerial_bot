@@ -28,30 +28,29 @@ try {
 
     $botClient->command('addshow', function ($message) use ($bot) {
         $text = $message->getText();
-        $user_input = getArrOfSubscribe($text);
+        $user_input["episodes"] = getEpisodesFromUserText($text);
+        $user_input["chat_id"] = $message->getChat()->getId();
 
         $answer = storeUserInput($user_input) ? "Success added" : "Fail in adding";
         $bot->sendMessage($message->getChat()->getId(), $answer);
     });
 
-    $data = json_decode(file_get_contents("php://input"));
+    $botClient->command("", function ($message) use ($bot){
+       $bot->sendMessage($message->getChat()->getId(), $message->getText());
+    });
 
-    echo json_encode($data);
+//    $statuses = fopen("status.json", r);
+//    if($statuses[])
 
-    if($data->send){
-        $bot->sendMessage("410782452",$data->text);
-    }
+//    $data = json_decode(file_get_contents("php://input"));
+//
+//    echo json_encode($data);
+//
+//    if($data->send){
+//        $bot->sendMessage("410782452",$data->text);
+//    }
 
     $botClient->run();
 
 } catch (\TelegramBot\Api\Exception $e) {
-}
-
-function getArrOfSubscribe($text){
-    $res = [];
-    return $res;
-}
-
-function storeUserInput($user_data){
-    return true;
 }
