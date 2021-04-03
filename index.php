@@ -38,8 +38,7 @@ try {
 
     $data = json_decode(file_get_contents("php://input"), true);
 
-//    $bot->sendMessage("410782452", $data["message"]["text"]);
-    $bot->sendMessage("410782452", json_encode($data));
+    $bot->sendMessage("410782452", $data["message"]["text"]);
 
 //    $statuses = fopen("status.json", r);
 //    if($statuses[])
