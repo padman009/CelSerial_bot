@@ -20,7 +20,7 @@ function checkUpdates() {
         if ($emptyTagDefined) $episodes_div[$index - 1] = $item;
         else $emptyTagDefined = ($item["text"] == "");
     }
-    unset($episodes_div[sizeof($div[1]["children"]) - 1]);
+    if($emptyTagDefined) unset($episodes_div[sizeof($div[1]["children"]) - 1]);
 
     $episodes = getEpisodesArrFromDivsArr($episodes_div);
 
@@ -32,8 +32,6 @@ function checkUpdates() {
 
     sendNotifies($formattedNotifyArr);
 }
-
-//checkUpdates();
 
 function getHtml($url)
 {
@@ -143,7 +141,7 @@ function getFreshEpisodes($episodes){
     if(sizeof($stored_episodes) == sizeof($episodes)){
         die();
     }else{
-//        storeTodayEpisodes($episodes);
+        storeData("today", $episodes);
         $res = array_filter($episodes, function ($item) use ($stored_episodes) {
             return !array_search($item, $stored_episodes);
         });
@@ -151,7 +149,7 @@ function getFreshEpisodes($episodes){
     return $res;
 }
 
-function storeTodayEpisodes($today_episodes){
+function storeData($arr_name, $arr){
 
     $curl = curl_init();
     curl_setopt_array($curl, [
@@ -159,26 +157,7 @@ function storeTodayEpisodes($today_episodes){
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => '',
         CURLOPT_CUSTOMREQUEST => 'POST',
-        CURLOPT_POSTFIELDS =>json_encode(["to" => "today", "arr" => $today_episodes]),
-        CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
-        CURLOPT_USERAGENT => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36"
-    ]);
-    $response = curl_exec($curl);
-    $response = json_decode($response, true);
-    curl_close($curl);
-
-    return $response["message"] == "Success";
-}
-
-function storeUserData($subs){
-
-    $curl = curl_init();
-    curl_setopt_array($curl, [
-        CURLOPT_URL => "http://n77165va.beget.tech/celserial_bot_data/",
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => '',
-        CURLOPT_CUSTOMREQUEST => 'POST',
-        CURLOPT_POSTFIELDS =>json_encode(["to" => "subs", "arr" => $subs]),
+        CURLOPT_POSTFIELDS =>json_encode(["to" => $arr_name, "arr" => $arr]),
         CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
         CURLOPT_USERAGENT => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36"
     ]);
