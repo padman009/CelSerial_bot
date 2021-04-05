@@ -17,14 +17,9 @@ try {
         $bot->sendMessage($message->getChat()->getId(), $answer);
     });
 
-    $botClient->command('hello', function ($message) use ($bot) {
-        $text = $message->getText();
-        $param = str_replace('/hello ', '', $text);
-        $answer = 'Неизвестная команда';
-        if (!empty($param))
-        {
-            $answer = 'Привет, ' . $message->getChat()->getFirstName();
-        }
+    $botClient->command('listshow', function ($message) use ($bot) {
+        $answer = getTextWithShows($message->getChat()->getId());
+
         $bot->sendMessage($message->getChat()->getId(), $answer);
     });
 
@@ -38,7 +33,10 @@ try {
         $statuses = json_decode(file_get_contents("status.json"), true);
         $statuses[$message->getChat()->getId()] = "addshow";
         file_put_contents("status.json", json_encode($statuses));
+
         $bot->sendMessage($message->getChat()->getId(), $answer);
+        $replyKeyboard = new ReplyKeyboardMarkup([["/cancel"]], true, true);
+        $bot->sendMessage($message->getChat()->getId(), "Вы можете отменить команду нажав на cancel", null, false, null, $replyKeyboard);
     });
 
 
@@ -48,26 +46,15 @@ try {
         $statuses = json_decode(file_get_contents("status.json"), true);
         unset($statuses[$message->getChat()->getId()]);
         file_put_contents("status.json", json_encode($statuses));
-        $bot->sendMessage($message->getChat()->getId(), $answer);
+        $bot->sendMessage($message->getChat()->getId(), $answer, null, false, null, new \TelegramBot\Api\Types\ReplyKeyboardRemove(true));
     });
 
-//
-//    echo json_encode($data);
-//
-//    if($data->send){
-//    $replyKeyboard = new \TelegramBot\Api\Types\ReplyKeyboardRemove();
-
-//    }
+//    $replyKeyboard = new ReplyKeyboardMarkup([["/cancel"]], true, true);
+//    $bot->sendMessage("410782452", "Вы можете отменить команду нажав на cancel", null, false, null, $replyKeyboard);
 
     addShowCheck($bot);
     $botClient->run();
 
-    $sendKeyboard =  function ($id, $text,Array $keyboard, $one_time = true, $resize_keyboard = true) use($bot){
-        $replyKeyboard = new ReplyKeyboardMarkup($keyboard, $one_time, $resize_keyboard);
-        $bot->sendMessage($id,$text, null, false, null, $replyKeyboard);
-    };
-
-//    $sendKeyboard("410782452", "Choose",[["4", "3"]]);
 
 } catch (\TelegramBot\Api\Exception $e) {
     echo $e->getMessage();

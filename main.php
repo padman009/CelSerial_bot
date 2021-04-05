@@ -159,3 +159,19 @@ function getDataFrom($filename){
 
     return $response;
 }
+
+function getTextWithShows($chat_id) {
+    $answer = "";
+    $subs = getDataFrom("subs");
+    if(isset($subs[$chat_id])){
+        $users_subs = $subs[$chat_id];
+        foreach ($users_subs as $index => $show) {
+            foreach ($show as $name => $sound) {
+                $answer .= $name." - ".$sound;
+            }
+        }
+    }else {
+        $answer = "У вас пока нет подписок";
+    }
+    return $answer;
+}
