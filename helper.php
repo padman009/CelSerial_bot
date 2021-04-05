@@ -31,7 +31,7 @@ function checkUpdates() {
     sendNotifies($formattedNotifyArr);
 }
 
-checkUpdates();
+//checkUpdates();
 
 function getHtml($url)
 {
@@ -138,7 +138,6 @@ function getEpisodesArrFromDivsArr($episodes_div){
 
 function getFreshEpisodes($episodes){
     $stored_episodes = getDataFrom("today");
-    $res = [];
     if(sizeof($stored_episodes) == sizeof($episodes)){
         die();
     }else{
