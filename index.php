@@ -3,9 +3,10 @@
 use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Client;
 use TelegramBot\Api\Types\ReplyKeyboardMarkup;
+use TelegramBot\Api\Types\ReplyKeyboardRemove;
 
 require_once "vendor/autoload.php";
-include_once "main.php";
+include_once "helper.php";
 
 try {
     $token = "1711530564:AAHyaED9pjIgroLmXmnxgNA8p5w3eiSUE2w";
@@ -57,7 +58,7 @@ try {
     $botClient->command('cancel', function ($message) use ($bot) {
         $answer = "Command canceled";
         deleteStatus($message->getChat()->getId());
-        $bot->sendMessage($message->getChat()->getId(), $answer, null, false, null, new \TelegramBot\Api\Types\ReplyKeyboardRemove(true));
+        $bot->sendMessage($message->getChat()->getId(), $answer, null, false, null, new ReplyKeyboardRemove(true));
     });
 
 //    $replyKeyboard = new ReplyKeyboardMarkup([["/cancel"]], true, true);
@@ -113,7 +114,7 @@ function addShowCheck($bot)
                 null,
                 false,
                 null,
-                new \TelegramBot\Api\Types\ReplyKeyboardRemove(true));
+                new ReplyKeyboardRemove(true));
         }
 
         deleteStatus($new_shows["chat_id"]);
@@ -163,7 +164,7 @@ function deleteShowCheck($bot)
                 null,
                 false,
                 null,
-                new \TelegramBot\Api\Types\ReplyKeyboardRemove(true));
+                new  ReplyKeyboardRemove(true));
         }
 
         deleteStatus($delete_shows["chat_id"]);
