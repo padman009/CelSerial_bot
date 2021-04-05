@@ -1,10 +1,9 @@
 <?php
-function main(){
-    header('Content-Type: application/json; charset=utf-8');
 
-//    $html = "\xEF\xBB\xBF".getHtml("https://rezka.ag/");
+function checkUpdates() {
+    $html = "\xEF\xBB\xBF" . getHtml("https://rezka.ag/");
 
-    $html = file_get_contents("test.html");
+//$html = file_get_contents("test.html");
 
     include_once "libs/php-selector-master/selector.inc";
 
@@ -13,7 +12,7 @@ function main(){
 
     $episodes_div = $div[1]["children"];
 
-    //delete empty tag that have not episode
+//delete empty tag that have not episode
     $emptyTagDefined = false;
     foreach ($episodes_div as $index => $item) {
         if ($emptyTagDefined) $episodes_div[$index - 1] = $item;
@@ -23,14 +22,16 @@ function main(){
 
     $episodes = getEpisodesArrFromDivsArr($episodes_div);
 
-    echo json_encode($episodes);
     $fresh_episodes = getFreshEpisodes($episodes);
-//    echo json_encode($fresh_episodes);
 
-    //$links = array_slice($dom->select('div[class="b-seriesupdate__block"]>>a'), 0, sizeof($episodes_div));
+    $notifyArr = getNotifyArr(getDataFrom("subs"), $fresh_episodes);
+
+    $formattedNotifyArr = formatNotifyArr($notifyArr);
+
+    sendNotifies($formattedNotifyArr);
 }
 
-//main();
+checkUpdates();
 
 function getHtml($url)
 {
@@ -51,6 +52,65 @@ function getHtml($url)
     return $response;
 }
 
+function sendNotifies($notifies){
+    $token = "1711530564:AAHyaED9pjIgroLmXmnxgNA8p5w3eiSUE2w";
+    $bot = new BotApi($token);
+
+    foreach ($notifies as $i => $notify) {
+        foreach ($notify["chat_id_arr"] as $j => $chat_id) {
+            $bot->sendMessage($chat_id, $notify["text"]);
+        }
+    }
+}
+
+function formatNotifyArr($notifyArr){
+    $res = [];
+
+    foreach ($notifyArr as $index => $episode) {
+        $text = $episode["name"].PHP_EOL;
+        $text .= "${episode["season"]} ${episode["episode"]}".PHP_EOL;
+        $text .= $episode["sound"].PHP_EOL;
+        $text .= $episode["link"].PHP_EOL;
+        $res[$index]["text"] = $text;
+        $res[$index]["chat_id_arr"] = $episode["chat_id_arr"];
+    }
+
+    return $res;
+}
+
+function getNotifyArr($subs, $episodes){
+    $res = [];
+
+    $optimizedSubs = optimizeSubsArr($subs);
+
+    foreach ($episodes as $index => $episode) {
+        if(isset($optimizedSubs[$episode["name"]][$episode["sound"]])){
+            $res[] = $episode;
+            $res[sizeof($res) - 1]["chat_id_arr"] = $optimizedSubs[$episode["name"]][$episode["sound"]];
+        }
+    }
+
+    return $res;
+}
+
+function optimizeSubsArr($subs){
+    $res = [];
+
+    foreach ($subs as $chat_id => $shows) {
+        foreach ($shows as $index => $show) {
+            foreach ($show as $name => $sound) {
+                if(isset($res[$name][$sound])){
+                    $res[$name][$sound][] = $chat_id;
+                }else{
+                    $res[$name] = [$sound => [$chat_id]];
+                }
+            }
+        }
+    }
+
+    return $res;
+}
+
 function getEpisodesFromUserText($text){
     $res = [];
     $raw_shows = explode("\n", $text);
@@ -67,9 +127,9 @@ function getEpisodesArrFromDivsArr($episodes_div){
     foreach ($episodes_div as $index => $div) {
         $episode["name"] = $div["children"][0]["children"][0]["children"][0]["text"];
         $episode["link"] = "https://rezka.ag".$div["children"][0]["children"][0]["children"][0]["attributes"]["href"];
-        $episode["season"] = $div["children"][0]["children"][0]["children"][1]["text"];
+        $episode["season"] = trim($div["children"][0]["children"][0]["children"][1]["text"], "()");
         $episode["sound"] = isset($div["children"][0]["children"][1]["children"][0]["text"]) ? $div["children"][0]["children"][1]["children"][0]["text"] : "";
-        $episode["episode"] = str_replace($episode["sound"],"",$div["children"][0]["children"][1]["text"]);
+        $episode["episode"] = trim(str_replace($episode["sound"],"",$div["children"][0]["children"][1]["text"]));
 
         $episodes[] = $episode;
     }
@@ -79,15 +139,13 @@ function getEpisodesArrFromDivsArr($episodes_div){
 function getFreshEpisodes($episodes){
     $stored_episodes = getDataFrom("today");
     $res = [];
-    if(sizeof($stored_episodes) > sizeof($episodes)){
+    if(sizeof($stored_episodes) == sizeof($episodes)){
+        die();
+    }else{
         storeTodayEpisodes($episodes);
-        $res = $episodes;
-    }elseif (sizeof($stored_episodes) < sizeof($episodes)){
         $res = array_filter($episodes, function ($item) use ($stored_episodes) {
             return !array_search($item, $stored_episodes);
         });
-    }else{
-        die();
     }
     return $res;
 }
