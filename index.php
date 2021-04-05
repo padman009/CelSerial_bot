@@ -17,7 +17,7 @@ try {
         $bot->sendMessage($message->getChat()->getId(), $answer);
     });
 
-    $botClient->command('listshow', function ($message) use ($bot) {
+    $botClient->command('listofshows', function ($message) use ($bot) {
         $answer = getTextWithShows($message->getChat()->getId());
 
         $bot->sendMessage($message->getChat()->getId(), $answer);
@@ -79,7 +79,7 @@ function addShowCheck($bot)
             $bot->sendMessage("410782452", json_encode($response));
             $bot->sendMessage($data["message"]["from"]["id"], "Adding show failed");
         }else{
-            $bot->sendMessage($data["message"]["from"]["id"], "Шоу успешно добавлено!\nПроверьте командой /listshow");
+            $bot->sendMessage($data["message"]["from"]["id"], "Шоу успешно добавлено!\nПроверьте командой /listofshows");
         }
     }
 }
