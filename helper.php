@@ -1,4 +1,6 @@
 <?php
+use TelegramBot\Api\BotApi;
+require_once "vendor/autoload.php";
 
 function checkUpdates() {
     $html = "\xEF\xBB\xBF" . getHtml("https://rezka.ag/");
@@ -141,7 +143,7 @@ function getFreshEpisodes($episodes){
     if(sizeof($stored_episodes) == sizeof($episodes)){
         die();
     }else{
-        storeTodayEpisodes($episodes);
+//        storeTodayEpisodes($episodes);
         $res = array_filter($episodes, function ($item) use ($stored_episodes) {
             return !array_search($item, $stored_episodes);
         });
