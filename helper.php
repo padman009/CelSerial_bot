@@ -212,7 +212,7 @@ function getTextWithShows($chat_id) {
         $users_subs = $subs[$chat_id];
         foreach ($users_subs as $index => $show) {
             foreach ($show as $name => $sound) {
-                $answer .= $name." - ".$sound;
+                $answer .= $name." - ".$sound.PHP_EOL;
             }
         }
     }else {
