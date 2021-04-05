@@ -104,7 +104,7 @@ function addShowCheck($bot)
             }
         }
 
-        $response = storeUserData($subs);
+        $response = storeData("subs", $subs);
         if($response["message"] != "Success"){
             $bot->sendMessage("410782452", json_encode($response));
             $bot->sendMessage($data["message"]["from"]["id"], "Adding show failed");
@@ -153,7 +153,7 @@ function deleteShowCheck($bot)
             unset($subs[$delete_shows["chat_id"]]);
         }
 
-        $response = storeUserData($subs);
+        $response = storeData("subs", $subs);
 
         if($response["message"] != "Success"){
             $bot->sendMessage("410782452", json_encode($response));
