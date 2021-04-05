@@ -108,7 +108,12 @@ function addShowCheck($bot)
             $bot->sendMessage("410782452", json_encode($response));
             $bot->sendMessage($data["message"]["from"]["id"], "Adding show failed");
         }else{
-            $bot->sendMessage($data["message"]["from"]["id"], "Шоу успешно добавлено!\nПроверьте командой /listofshows");
+            $bot->sendMessage($data["message"]["from"]["id"],
+                "Шоу успешно добавлено!\nПроверьте командой /listofshows",
+                null,
+                false,
+                null,
+                new \TelegramBot\Api\Types\ReplyKeyboardRemove(true));
         }
 
         deleteStatus($new_shows["chat_id"]);
@@ -153,7 +158,12 @@ function deleteShowCheck($bot)
             $bot->sendMessage("410782452", json_encode($response));
             $bot->sendMessage($data["message"]["from"]["id"], "Удаление подписки не удалось");
         }else{
-            $bot->sendMessage($data["message"]["from"]["id"], "Подписка(-и) успешно удалена!\nПроверьте командой /listofshows");
+            $bot->sendMessage($data["message"]["from"]["id"],
+                "Подписка(-и) успешно удалена!\nПроверьте командой /listofshows",
+                null,
+                false,
+                null,
+                new \TelegramBot\Api\Types\ReplyKeyboardRemove(true));
         }
 
         deleteStatus($delete_shows["chat_id"]);
