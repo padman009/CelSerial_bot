@@ -111,19 +111,7 @@ function storeTodayEpisodes($today_episodes){
     return $response["message"] == "Success";
 }
 
-//echo json_encode(storeUserInput(["chat_id"=>"1212", "episodes" => [["Супергёрл" => "lostfilm"],["ЛЗД"=>"Lostfilms"]]]));
-//echo json_encode(getDataFrom("subs"));
-function storeUserInput($user_data){
-    $subs = getDataFrom("subs");
-
-    if(!isset($subs[$user_data["chat_id"]])){
-        $subs[$user_data["chat_id"]] = [];
-    }
-    foreach ($user_data["episodes"] as $index => $episode) {
-        if(!array_search($episode, $subs[$user_data["chat_id"]])){
-            $subs[$user_data["chat_id"]][] = $episode;
-        }
-    }
+function storeUserData($subs){
 
     $curl = curl_init();
     curl_setopt_array($curl, [
