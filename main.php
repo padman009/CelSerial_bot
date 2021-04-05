@@ -53,7 +53,7 @@ function getHtml($url)
 
 function getEpisodesFromUserText($text){
     $res = [];
-    $raw_shows = mb_split("\n", $text);
+    $raw_shows = explode("\n", $text);
     foreach ($raw_shows as $index => $show) {
         $index = strpos($show, "(");
         $res[] = [substr($show, 0, $index) => substr($show, $index) == "()" ? "" : substr($show, $index)];
