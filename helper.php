@@ -3,9 +3,6 @@ header('Content-Type: application/json; charset=utf-8');
 use TelegramBot\Api\BotApi;
 require_once "vendor/autoload.php";
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->safeLoad();
-
 echo json_encode($_ENV);
 
 function checkUpdates() {
