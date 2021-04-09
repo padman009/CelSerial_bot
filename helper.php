@@ -1,6 +1,12 @@
 <?php
+header('Content-Type: application/json; charset=utf-8');
 use TelegramBot\Api\BotApi;
 require_once "vendor/autoload.php";
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
+
+echo json_encode($_ENV);
 
 function checkUpdates() {
     $html = "\xEF\xBB\xBF" . getHtml("https://rezka.ag/");
@@ -53,12 +59,16 @@ function getHtml($url)
 }
 
 function sendNotifies($notifies){
-    $token = "1711530564:AAHyaED9pjIgroLmXmnxgNA8p5w3eiSUE2w";
+    $token = $_ENV["BotToken"];
     $bot = new BotApi($token);
 
     foreach ($notifies as $i => $notify) {
         foreach ($notify["chat_id_arr"] as $j => $chat_id) {
-            $bot->sendMessage($chat_id, $notify["text"]);
+            try {
+                $bot->sendMessage($chat_id, $notify["text"]);
+            } catch (\TelegramBot\Api\InvalidArgumentException | \TelegramBot\Api\Exception $e) {
+                echo PHP_EOL.$e->getMessage();
+            }
         }
     }
 }
@@ -127,7 +137,11 @@ function getEpisodesArrFromDivsArr($episodes_div){
     foreach ($episodes_div as $index => $div) {
         $episode["name"] = $div["children"][0]["children"][0]["children"][0]["text"];
         $episode["link"] = "https://rezka.ag".$div["children"][0]["children"][0]["children"][0]["attributes"]["href"];
-        $episode["season"] = trim($div["children"][0]["children"][0]["children"][1]["text"], "()");
+        if(isset($div["children"][0]["children"][0]["children"][1]["text"])){
+            $episode["season"] = trim($div["children"][0]["children"][0]["children"][1]["text"], "()");
+        }else {
+            $episode["season"] = "";
+        }
         $episode["sound"] = isset($div["children"][0]["children"][1]["children"][0]["text"]) ? $div["children"][0]["children"][1]["children"][0]["text"] : "";
         $episode["episode"] = trim(str_replace($episode["sound"],"",$div["children"][0]["children"][1]["text"]));
 

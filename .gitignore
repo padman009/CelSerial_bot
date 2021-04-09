@@ -155,3 +155,4 @@ my_database/subscribes.json
 config/database.php
 test.*
 /vendor/
+/.env

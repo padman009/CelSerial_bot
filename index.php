@@ -9,7 +9,7 @@ require_once "vendor/autoload.php";
 include_once "helper.php";
 
 try {
-    $token = "1711530564:AAHyaED9pjIgroLmXmnxgNA8p5w3eiSUE2w";
+    $token = $_ENV["BotToken"];
     $bot = new BotApi($token);
     $botClient = new Client($token);
 
