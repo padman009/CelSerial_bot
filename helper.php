@@ -3,8 +3,6 @@ header('Content-Type: application/json; charset=utf-8');
 use TelegramBot\Api\BotApi;
 require_once "vendor/autoload.php";
 
-echo json_encode($_ENV);
-
 function checkUpdates() {
     $html = "\xEF\xBB\xBF" . getHtml("https://rezka.ag/");
 

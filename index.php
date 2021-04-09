@@ -62,7 +62,7 @@ try {
     });
 
 //    $replyKeyboard = new ReplyKeyboardMarkup([["/cancel"]], true, true);
-//    $bot->sendMessage("410782452", "Вы можете отменить команду нажав на cancel", null, false, null, $replyKeyboard);
+//    $bot->sendMessage($_ENV["owner"], "Вы можете отменить команду нажав на cancel", null, false, null, $replyKeyboard);
 
     addShowCheck($bot);
     deleteShowCheck($bot);
@@ -71,7 +71,7 @@ try {
 
 } catch (\TelegramBot\Api\Exception $e) {
     echo $e->getMessage().PHP_EOL.json_encode($e->getTrace());
-    $bot->sendMessage("410782452", json_encode($e->getMessage()));
+    $bot->sendMessage($_ENV["owner"], json_encode($e->getMessage()));
 }
 
 function deleteStatus ($chat_id){
@@ -106,7 +106,7 @@ function addShowCheck($bot)
 
         $response = storeData("subs", $subs);
         if($response["message"] != "Success"){
-            $bot->sendMessage("410782452", json_encode($response));
+            $bot->sendMessage($_ENV["owner"], json_encode($response));
             $bot->sendMessage($data["message"]["from"]["id"], "Adding show failed");
         }else{
             $bot->sendMessage($data["message"]["from"]["id"],
@@ -156,7 +156,7 @@ function deleteShowCheck($bot)
         $response = storeData("subs", $subs);
 
         if($response["message"] != "Success"){
-            $bot->sendMessage("410782452", json_encode($response));
+            $bot->sendMessage($_ENV["owner"], json_encode($response));
             $bot->sendMessage($data["message"]["from"]["id"], "Удаление подписки не удалось");
         }else{
             $bot->sendMessage($data["message"]["from"]["id"],
