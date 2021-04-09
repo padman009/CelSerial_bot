@@ -14,7 +14,7 @@ try {
     $botClient = new Client($token);
 
     $botClient->command('start', function ($message) use ($bot) {
-        $answer = "Добро пожаловать! " . $message->getChat()->getFirstName();
+        $answer = "Добро пожаловать! " . $message->getChat()->getFirstName()."\nЭто бот который уведомляет о новых сериях шоу на которые вы подписаны. \"Шоу\" это аниме, сериалы, мульсериалы, всё что состоит из эпизодов, а также имеется на сайте https://rezka.ag";
         $bot->sendMessage($message->getChat()->getId(), $answer);
     });
 
