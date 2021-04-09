@@ -2,7 +2,6 @@
     "require": {
         "telegram-bot/api": "^2.3",
       "ext-curl": "*",
-      "ext-dom": "*",
-        "vlucas/phpdotenv": "^5.3"
+      "ext-dom": "*"
     }
 }
