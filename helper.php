@@ -62,6 +62,7 @@ function sendNotifies($notifies){
             try {
                 $bot->sendMessage($chat_id, $notify["text"]);
             } catch (\TelegramBot\Api\InvalidArgumentException | \TelegramBot\Api\Exception $e) {
+                echo PHP_EOL."SendMessage Error. Check bot token";
                 echo PHP_EOL.$e->getMessage();
             }
         }
