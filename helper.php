@@ -2,13 +2,12 @@
 header('Content-Type: application/json; charset=utf-8');
 use TelegramBot\Api\BotApi;
 require_once "vendor/autoload.php";
+require_once "libs/php-selector-master/selector.inc";
 
 function checkUpdates() {
     $html = "\xEF\xBB\xBF" . getHtml("https://rezka.ag/");
 
-//$html = file_get_contents("test.html");
-
-    include_once "libs/php-selector-master/selector.inc";
+//    $html = file_get_contents("test.html");
 
     $dom = new SelectorDOM($html);
     $div = $dom->select('div[class="b-seriesupdate__block"]')[0]["children"];
@@ -49,6 +48,12 @@ function getHtml($url)
     ));
 
     $response = curl_exec($curl);
+
+    if(curl_errno($curl)){
+        echo curl_errno($curl).PHP_EOL;
+        echo "Curl error".curl_error($curl).PHP_EOL;
+    }
+
     curl_close($curl);
     return $response;
 }
@@ -148,14 +153,13 @@ function getEpisodesArrFromDivsArr($episodes_div){
 
 function getFreshEpisodes($episodes){
     $stored_episodes = getDataFrom("today");
-    if(sizeof($stored_episodes) == sizeof($episodes)){
-        die();
-    }else{
-        storeData("today", $episodes);
-        $res = array_filter($episodes, function ($item) use ($stored_episodes) {
-            return !array_search($item, $stored_episodes);
-        });
-    }
+
+    $res = array_filter($episodes, function ($item) use ($stored_episodes) {
+        return !array_search($item, $stored_episodes);
+    });
+
+    storeData("today", $episodes);
+
     return $res;
 }
 

@@ -61,9 +61,6 @@ try {
         $bot->sendMessage($message->getChat()->getId(), $answer, null, false, null, new ReplyKeyboardRemove(true));
     });
 
-//    $replyKeyboard = new ReplyKeyboardMarkup([["/cancel"]], true, true);
-//    $bot->sendMessage($_ENV["owner"], "Вы можете отменить команду нажав на cancel", null, false, null, $replyKeyboard);
-
     addShowCheck($bot);
     deleteShowCheck($bot);
     $botClient->run();
@@ -71,7 +68,7 @@ try {
 
 } catch (\TelegramBot\Api\Exception $e) {
     echo $e->getMessage().PHP_EOL.json_encode($e->getTrace());
-    $bot->sendMessage($_ENV["owner"], json_encode($e->getMessage()));
+    $bot->sendMessage("410782452", json_encode($e->getMessage()));
 }
 
 function deleteStatus ($chat_id){
