@@ -5,32 +5,36 @@ require_once "vendor/autoload.php";
 require_once "libs/php-selector-master/selector.inc";
 
 function checkUpdates() {
-    $html = "\xEF\xBB\xBF" . getHtml("https://rezka.ag/");
+    try {
+        $html = "\xEF\xBB\xBF" . getHtml("https://rezka.ag/");
 
 //    $html = file_get_contents("test.html");
 
-    $dom = new SelectorDOM($html);
-    $div = $dom->select('div[class="b-seriesupdate__block"]')[0]["children"];
+        $dom = new SelectorDOM($html);
+        $div = $dom->select('div[class="b-seriesupdate__block"]')[0]["children"];
 
-    $episodes_div = $div[1]["children"];
+        $episodes_div = $div[1]["children"];
 
 //delete empty tag that have not episode
-    $emptyTagDefined = false;
-    foreach ($episodes_div as $index => $item) {
-        if ($emptyTagDefined) $episodes_div[$index - 1] = $item;
-        else $emptyTagDefined = ($item["text"] == "");
+        $emptyTagDefined = false;
+        foreach ($episodes_div as $index => $item) {
+            if ($emptyTagDefined) $episodes_div[$index - 1] = $item;
+            else $emptyTagDefined = ($item["text"] == "");
+        }
+        if ($emptyTagDefined) unset($episodes_div[sizeof($div[1]["children"]) - 1]);
+
+        $episodes = getEpisodesArrFromDivsArr($episodes_div);
+
+        $fresh_episodes = getFreshEpisodes($episodes);
+
+        $notifyArr = getNotifyArr(getDataFrom("subs"), $fresh_episodes);
+
+        $formattedNotifyArr = formatNotifyArr($notifyArr);
+
+        sendNotifies($formattedNotifyArr);
+    }catch (\Throwable $th){
+        sendNotifies(["chat_id_arr" => $_ENV["owner"], "text" => $th->getMessage().PHP_EOL.$th->getTraceAsString()]);
     }
-    if($emptyTagDefined) unset($episodes_div[sizeof($div[1]["children"]) - 1]);
-
-    $episodes = getEpisodesArrFromDivsArr($episodes_div);
-
-    $fresh_episodes = getFreshEpisodes($episodes);
-
-    $notifyArr = getNotifyArr(getDataFrom("subs"), $fresh_episodes);
-
-    $formattedNotifyArr = formatNotifyArr($notifyArr);
-
-    sendNotifies($formattedNotifyArr);
 }
 
 function getHtml($url)
