@@ -66,9 +66,9 @@ try {
     $botClient->run();
 
 
-} catch (\TelegramBot\Api\Exception $e) {
-    echo $e->getMessage().PHP_EOL.json_encode($e->getTrace());
-    $bot->sendMessage($_ENV["owner"], json_encode($e->getMessage()));
+} catch (Exception | \TelegramBot\Api\Exception $e) {
+    echo $e->getMessage().PHP_EOL.$e->getTraceAsString();
+    $bot->sendMessage($_ENV["owner"], $e->getMessage() . PHP_EOL . $e->getTraceAsString());
 }
 
 function deleteStatus ($chat_id){

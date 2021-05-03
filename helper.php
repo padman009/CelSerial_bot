@@ -11,6 +11,11 @@ function checkUpdates() {
 //    $html = file_get_contents("test.html");
 
         $dom = new SelectorDOM($html);
+        if(empty($dom->select('div[class="b-seriesupdate__block"]'))){
+//        if(true){
+            storeData("error_at", json_encode("['text':'$html]"));
+            throw new Exception("Error on getting seriesupdate__block from html");
+        }
         $div = $dom->select('div[class="b-seriesupdate__block"]')[0]["children"];
 
         $episodes_div = $div[1]["children"];
@@ -32,8 +37,8 @@ function checkUpdates() {
         $formattedNotifyArr = formatNotifyArr($notifyArr);
 
         sendNotifies($formattedNotifyArr);
-    }catch (\Throwable $th){
-        sendNotifies(["chat_id_arr" => $_ENV["owner"], "text" => $th->getMessage().PHP_EOL.$th->getTraceAsString()]);
+    }catch (Exception $e){
+        sendNotifies([["chat_id_arr" => [$_ENV["owner"]], "text" => $e->getMessage().PHP_EOL.$e->getTraceAsString()]]);
     }
 }
 
@@ -54,8 +59,8 @@ function getHtml($url)
     $response = curl_exec($curl);
 
     if(curl_errno($curl)){
-        echo curl_errno($curl).PHP_EOL;
-        echo "Curl error".curl_error($curl).PHP_EOL;
+        echo "Curl errno-".curl_errno($curl).PHP_EOL;
+        echo "Curl error-".curl_error($curl).PHP_EOL;
     }
 
     curl_close($curl);
@@ -162,7 +167,7 @@ function getFreshEpisodes($episodes){
         return !array_search($item, $stored_episodes);
     });
 
-    storeData("today", $episodes);
+//    storeData("today", $episodes);
 
     return $res;
 }
