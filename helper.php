@@ -13,7 +13,7 @@ function checkUpdates() {
         $dom = new SelectorDOM($html);
         if(empty($dom->select('div[class="b-seriesupdate__block"]'))){
 //        if(true){
-            storeData("error_at", json_encode("['text':'$html]"));
+            storeData("error_at", json_encode($html));
             throw new Exception("Error on getting seriesupdate__block from html");
         }
         $div = $dom->select('div[class="b-seriesupdate__block"]')[0]["children"];
