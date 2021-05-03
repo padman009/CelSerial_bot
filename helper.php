@@ -167,7 +167,7 @@ function getFreshEpisodes($episodes){
         return !array_search($item, $stored_episodes);
     });
 
-//    storeData("today", $episodes);
+    storeData("today", $episodes);
 
     return $res;
 }
